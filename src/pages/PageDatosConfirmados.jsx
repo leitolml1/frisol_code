@@ -16,6 +16,11 @@ export  function PageDatosConfirmados() {
               <div>
               <h1 className='text-xl font-bold text-gray-100'>Datos enviados</h1>
                 <h2 className=' text-gray-100'>En unos dias te llegara tu invitacion via QR, no olvides revisar tu correo</h2>
+                <div className='flex flex-row justify-center'>
+                <img 
+               
+               src="https://media.tenor.com/NeJfHqkmdMIAAAAj/tux-linux-penguin.gif" alt="" />
+                </div>
               </div>
                 <div>
                     <h1 className='text-xl font-bold  text-gray-100'>Sponsorea</h1>

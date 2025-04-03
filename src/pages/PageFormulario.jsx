@@ -3,13 +3,12 @@ import { Link } from 'react-router-dom'
 import { HiUser } from "react-icons/hi";
 import { HiPhone } from "react-icons/hi";
 import { CgMail } from "react-icons/cg";
-
-
+import { useForm } from 'react-hook-form';
 export function PageFormulario() {
+    const {register,handleSubmit}=useForm()
     return (
         <>
             <div className="flex items-center justify-center min-h-screen p-6 ">
-
                 <div className="bg-gray-900 p-6 rounded-lg w-full max-w-md  shadow-xl shadow-gray-800 ">
                     <div className="flex justify-center mb-4">
                         <img
@@ -42,7 +41,9 @@ export function PageFormulario() {
 
                             <input type="email" className="w-full p-2 rounded-xl border border-gray-700 bg-sky-50" placeholder='Correo electronico' />
                         </div>
-                        <button class="relative px-6 py-3 text-white font-bold rounded-lg overflow-hidden bg-gradient-to-r from-pink-500 via-orange-500 to-orange-800 animate-gradient w-full">
+
+                        <button class="relative px-6 py-3 text-white font-bold rounded-lg overflow-hidden bg-gradient-to-r from-pink-500 via-yellow-500
+                         to-pink-600 animate-gradient w-full botonEnviar">
                             <Link to="/entradaQR">Enviar</Link>
 
                         </button>
