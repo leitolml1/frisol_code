@@ -9,7 +9,7 @@ export  function AppRouter() {
   return (
     <Routes>
         
-        <Route path="/formularioFrisol" element={<PageFormulario/>}/>
+        <Route path="" element={<PageFormulario/>}/>
         <Route path="/datosConfirmados" element={<PageDatosConfirmados/>}/>
         <Route path="/entradaQR" element={<PageEntradaQR/>}/>
         <Route path="/cartonEventos" element={<PageCartonEventos/>}/>
