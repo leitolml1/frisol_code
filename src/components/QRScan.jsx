@@ -1,58 +1,71 @@
-import React, { useState, useEffect } from 'react';
-import { Html5QrcodeScanner } from 'html5-qrcode';
+import React, { useEffect, useRef, useState } from 'react';
+import { Html5Qrcode } from 'html5-qrcode';
 
 export function QRScan() {
-  const [mostrarScanner, setMostrarScanner] = useState(false);
+  const scannerRef = useRef(null);
+  const [isScanning, setIsScanning] = useState(false);
+
+  const handleScan = async () => {
+    const qrRegionId = 'reader';
+    const html5QrCode = new Html5Qrcode(qrRegionId);
+    scannerRef.current = html5QrCode;
+
+    try {
+      const devices = await Html5Qrcode.getCameras();
+      if (devices && devices.length > 0) {
+        const cameraId = devices[0].id;
+
+        html5QrCode.start(
+          cameraId,
+          {
+            fps: 10,
+            qrbox: { width: 250, height: 250 },
+          },
+          (decodedText, decodedResult) => {
+            alert(`✅ Código escaneado: ${decodedText}`);
+            html5QrCode.stop().then(() => {
+              html5QrCode.clear();
+              setIsScanning(false);
+            });
+          },
+          (errorMessage) => {
+            // Ignorar errores de escaneo
+          }
+        );
+        setIsScanning(true);
+      }
+    } catch (error) {
+      console.error("Error al acceder a la cámara", error);
+      alert("No se pudo acceder a la cámara.");
+    }
+  };
 
   useEffect(() => {
-    let scanner;
-
-    if (mostrarScanner) {
-      scanner = new Html5QrcodeScanner("qr-reader", {
-        fps: 10,
-        qrbox: { width: 250, height: 250 }
-      });
-
-      scanner.render(
-        (decodedText) => {
-          console.log("QR detectado:", decodedText);
-          alert(`Código escaneado: ${decodedText}`);
-          // ✅ Oculta el escáner después de escanear
-          setMostrarScanner(false);
-          scanner.clear().catch(err => console.error("Error limpiando scanner:", err));
-        },
-        (error) => {
-          console.warn("Error al escanear:", error);
-        }
-      );
-    }
-
     return () => {
-      if (scanner) {
-        scanner.clear().catch((error) => {
-          console.error("Error al limpiar escáner:", error);
+      if (scannerRef.current) {
+        scannerRef.current.stop().then(() => {
+          scannerRef.current.clear();
+        }).catch(err => {
+          console.error("Error limpiando escáner", err);
         });
       }
     };
-  }, [mostrarScanner]);
+  }, []);
 
   return (
-    <>
-        <div className="flex flex-col items-center p-4 justify-center">
-      <h2 className="text-xl font-bold mb-4">Escaneá tu código QR</h2>
-
-      {!mostrarScanner && (
+    <div className="flex flex-col items-center gap-4 p-4">
+      <h2 className="text-xl font-semibold">Escanear QR</h2>
+      
+      {!isScanning && (
         <button
+          onClick={handleScan}
           className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
-          onClick={() => setMostrarScanner(true)}
         >
-          Activar cámara
+          Abrir cámara
         </button>
       )}
 
-      {/* Div donde se monta el lector */}
-      {mostrarScanner && <div id="qr-reader" style={{ width: "300px" }}></div>}
+      <div id="reader" style={{ width: '300px' }}></div>
     </div>
-    </>
   );
 }
