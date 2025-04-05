@@ -7,6 +7,7 @@ export function QRScan() {
   const scannerRef = useRef(null);
   const [isScanning, setIsScanning] = useState(false);
   const [scannedText, setScannedText] = useState(null);
+  const [scanned, setScanned] = useState(false); // ✅ Estado que cambia cuando se escanea
 
   const handleScan = async () => {
     if (isScanning) return;
@@ -76,7 +77,16 @@ export function QRScan() {
     <div className="flex flex-col items-center gap-4 p-4">
       <h2 className="text-xl font-semibold">Escanear QR</h2>
 
-      {!isScanning && (
+      <div id="reader" style={{ width: '300px' }}></div>
+      {scanned
+        ?
+        <div class=" p-2  bg-linear-to-r from-green-500 to-green-800 text-center text-black rounded-lg 
+                         ">
+          <FaCheck
+            className='text-xl'
+          />
+        </div>
+        :
         <button
           onClick={handleScan}
           className="p-2 bg-white text-center text-black rounded-lg 
@@ -88,22 +98,8 @@ export function QRScan() {
           />
 
         </button>
-
-
-
-      )}
-
-      <div id="reader" style={{ width: '300px' }}></div>
-
-      {scannedText && (
-        <div class=" p-2  bg-linear-to-r from-green-500 to-green-800 text-center text-black rounded-lg 
-                         ">
-          <FaCheck
-            className='text-xl'
-          />
-        </div>
-
-      )}
+    }
+    
     </div>
   );
 }
