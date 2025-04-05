@@ -7,7 +7,7 @@ export function QRScan() {
   const scannerRef = useRef(null);
   const [isScanning, setIsScanning] = useState(false);
   const [scannedText, setScannedText] = useState(null);
-  const [scanned, setScanned] = useState(false); // ✅ Estado que cambia cuando se escanea
+  const [scanned, setScanned] = useState(false);
 
   const handleScan = async () => {
     if (isScanning) return;
@@ -23,7 +23,6 @@ export function QRScan() {
         return;
       }
 
-      // Elegir cámara trasera si es posible
       const backCamera = devices.find(device =>
         device.label.toLowerCase().includes('back')
       ) || devices[0];
@@ -38,6 +37,7 @@ export function QRScan() {
         },
         (decodedText, decodedResult) => {
           setScannedText(decodedText);
+          setScanned(true); // ✅ AHORA sí cambia el ícono
           alert(`✅ Código escaneado: ${decodedText}`);
 
           html5QrCode.stop().then(() => {
@@ -46,7 +46,7 @@ export function QRScan() {
           }).catch(err => console.error("Error al detener escaneo", err));
         },
         (errorMessage) => {
-          // Ignorar errores de escaneo frecuentes
+          // errores ignorados
         }
       );
 
@@ -78,28 +78,19 @@ export function QRScan() {
       <h2 className="text-xl font-semibold">Escanear QR</h2>
 
       <div id="reader" style={{ width: '300px' }}></div>
-      {scanned
-        ?
-        <div class=" p-2  bg-linear-to-r from-green-500 to-green-800 text-center text-black rounded-lg 
-                         ">
-          <FaCheck
-            className='text-xl'
-          />
+
+      {scanned ? (
+        <div className="p-2 bg-green-500 text-center text-black rounded-lg shadow-md">
+          <FaCheck className='text-xl' />
         </div>
-        :
+      ) : (
         <button
           onClick={handleScan}
-          className="p-2 bg-white text-center text-black rounded-lg 
-          border-1 border-blue-500 animate-pulse"
+          className="p-2 bg-white text-center text-black rounded-lg border border-blue-500 animate-pulse"
         >
-
-          <BsQrCodeScan
-            className='text-xl'
-          />
-
+          <BsQrCodeScan className='text-xl' />
         </button>
-    }
-    
+      )}
     </div>
   );
 }
