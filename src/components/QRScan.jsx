@@ -1,16 +1,19 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Html5Qrcode } from 'html5-qrcode';
 import { BsQrCodeScan } from "react-icons/bs";
-import { FaCheck } from "react-icons/fa";
+import { FaCheck, FaTimes } from "react-icons/fa";
 
-export function QRScan() {
+export function QRScan({ idEsperado }) {
   const scannerRef = useRef(null);
   const [isScanning, setIsScanning] = useState(false);
-  const [scannedText, setScannedText] = useState(null);
   const [scanned, setScanned] = useState(false);
+  const [valid, setValid] = useState(null);
+  const [expanded, setExpanded] = useState(false);
 
   const handleScan = async () => {
     if (isScanning) return;
+
+    setExpanded(true);
 
     const qrRegionId = 'reader';
     const html5QrCode = new Html5Qrcode(qrRegionId);
@@ -19,7 +22,7 @@ export function QRScan() {
     try {
       const devices = await Html5Qrcode.getCameras();
       if (!devices || devices.length === 0) {
-        alert("❌ No se encontraron cámaras disponibles.");
+        alert("❌ No se encontraron cámaras.");
         return;
       }
 
@@ -27,70 +30,78 @@ export function QRScan() {
         device.label.toLowerCase().includes('back')
       ) || devices[0];
 
-      const cameraId = backCamera.id;
-
       html5QrCode.start(
-        cameraId,
+        backCamera.id,
         {
           fps: 10,
-          qrbox: { width: 250, height: 250 },
+          qrbox: { width: 200, height: 200 },
         },
-        (decodedText, decodedResult) => {
-          setScannedText(decodedText);
-          setScanned(true); // ✅ AHORA sí cambia el ícono
-          alert(`✅ Código escaneado: ${decodedText}`);
-
+        (decodedText) => {
           html5QrCode.stop().then(() => {
             html5QrCode.clear();
             setIsScanning(false);
-          }).catch(err => console.error("Error al detener escaneo", err));
+          });
+
+          if (decodedText === `actividad:${idEsperado}`) {
+            setScanned(true);
+            setValid(true);
+          } else {
+            setScanned(true);
+            setValid(false);
+          }
         },
-        (errorMessage) => {
-          // errores ignorados
-        }
+        (err) => {}
       );
 
       setIsScanning(true);
     } catch (error) {
       console.error("Error al acceder a la cámara", error);
-      if (error.name === 'NotAllowedError') {
-        alert("🚫 Permiso de cámara denegado.");
-      } else {
-        alert("⚠️ Error al acceder a la cámara.");
-      }
+      alert("🚫 Permiso de cámara denegado.");
     }
   };
 
   useEffect(() => {
     return () => {
       if (scannerRef.current) {
-        scannerRef.current.stop().then(() => {
-          scannerRef.current.clear();
-        }).catch(err => {
-          console.error("Error limpiando escáner", err);
-        });
+        scannerRef.current.stop().then(() => scannerRef.current.clear());
       }
     };
   }, []);
 
   return (
-    <div className="flex flex-col items-center gap-4 p-4">
-      <h2 className="text-xl font-semibold">Escanear QR</h2>
+    <div className="flex items-center gap-3 relative">
+      {/* Lector QR */}
+      <div className="relative">
+        <div
+          id="reader"
+          className={`transition-all duration-300 bg-black rounded-md overflow-hidden
+            ${expanded ? 'w-[200px] h-[200px]' : 'w-[1px] h-[1px]'}`}
+        />
+        {!expanded && (
+          <button
+            onClick={handleScan}
+            className=" p-2 bg-white text-black rounded-md z-10"
+          >
+            <BsQrCodeScan className="text-xl" />
+          </button>
+        )}
+      </div>
 
-      <div id="reader" style={{ width: '300px' }}></div>
+      {/* Actividad */}
+      <div className="text-white text-sm">
 
-      {scanned ? (
-        <div className="p-2 bg-green-500 text-center text-black rounded-lg shadow-md">
-          <FaCheck className='text-xl' />
-        </div>
-      ) : (
-        <button
-          onClick={handleScan}
-          className="p-2 bg-white text-center text-black rounded-lg border border-blue-500 animate-pulse"
-        >
-          <BsQrCodeScan className='text-xl' />
-        </button>
-      )}
+        {/* Mensaje de resultado */}
+        {scanned && valid && (
+          <div className="flex items-center gap-1 text-green-400">
+            <FaCheck /> QR correcto
+          </div>
+        )}
+        {scanned && valid === false && (
+          <div className="flex items-center gap-1 text-red-400">
+            <FaTimes /> QR incorrecto
+          </div>
+        )}
+      </div>
     </div>
   );
 }
