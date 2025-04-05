@@ -2,7 +2,7 @@ import React from 'react'
 import { BsQrCodeScan } from "react-icons/bs";
 import { FaCheck } from "react-icons/fa";
 
-export default function PageCartonEventos() {
+export  function PageCartonEventos() {
     return (
         <div className="flex items-center justify-center min-h-screen p-6 ">
             <div className="bg-gray-900 p-6 rounded-lg shadow-lg w-full max-w-md ">
