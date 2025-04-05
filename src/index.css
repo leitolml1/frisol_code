@@ -1,10 +1,27 @@
 @import "tailwindcss";
+
 body {
-    background-image: url('https://wallpapers.com/images/hd/ubuntu-purple-and-orange-4k-t8n8ojw2ta0wpbzq.jpg');
-    background-size: cover; /* Ajusta el tamaño para cubrir toda la pantalla */
-    background-position: center; /* Centra la imagen */
-    background-attachment: fixed; /* Fija la imagen mientras se hace scroll */
+  background: linear-gradient(135deg, rgb(27, 116, 190), #2aa8d4, #4ade80, #1e3a8a);
+  background-attachment: fixed;
+  height: 100vh;
+  margin: 0;
+  position: relative;
+  z-index: 0; /* Asegura que esté encima del ::before */
+
 }
+
+body::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.1);
+  clip-path: polygon(0 0, 100% 50%, 0 100%);
+  pointer-events: none;
+}
+
 @keyframes spin-slow {
     0% { transform: rotate(0deg); }
     100% { transform: rotate(360deg); }
