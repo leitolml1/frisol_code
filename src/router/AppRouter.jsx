@@ -2,9 +2,9 @@ import React from 'react'
 import {Routes,Route} from "react-router-dom"
 import { PageEntradaQR } from '../pages/PageEntradaQR'
 import { PageDatosConfirmados } from '../pages/PageDatosConfirmados'
-import { PageFormulario } from '../pages/pageFormulario'
 import { PageCartonEventos } from '../pages/PageCartonEventos'
 import { QRScan } from '../components/QRScan'
+import {PageFormulario} from '../pages/PageFormulario'
 export  function AppRouter() {
   return (
     <Routes>
