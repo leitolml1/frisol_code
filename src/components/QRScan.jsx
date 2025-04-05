@@ -3,7 +3,7 @@ import { Html5Qrcode } from 'html5-qrcode';
 import { BsQrCodeScan } from "react-icons/bs";
 import { FaCheck, FaTimes } from "react-icons/fa";
 
-export function QRScan({ idEsperado }) {
+export function QRScan({ idEsperado, onExpand = () => {} }) {
   const scannerRef = useRef(null);
   const [isScanning, setIsScanning] = useState(false);
   const [scanned, setScanned] = useState(false);
@@ -14,6 +14,7 @@ export function QRScan({ idEsperado }) {
     if (isScanning) return;
 
     setExpanded(true);
+    onExpand(true);
 
     const qrRegionId = 'reader';
     const html5QrCode = new Html5Qrcode(qrRegionId);
@@ -23,6 +24,7 @@ export function QRScan({ idEsperado }) {
       const devices = await Html5Qrcode.getCameras();
       if (!devices || devices.length === 0) {
         alert("❌ No se encontraron cámaras.");
+        onExpand(false);
         return;
       }
 
@@ -49,6 +51,12 @@ export function QRScan({ idEsperado }) {
             setScanned(true);
             setValid(false);
           }
+
+          // 🔐 Cerrar la cámara visual después de escanear
+          setTimeout(() => {
+            setExpanded(false);
+            onExpand(false);
+          }, 500);
         },
         (err) => {}
       );
@@ -56,6 +64,7 @@ export function QRScan({ idEsperado }) {
       setIsScanning(true);
     } catch (error) {
       console.error("Error al acceder a la cámara", error);
+      onExpand(false);
       alert("🚫 Permiso de cámara denegado.");
     }
   };
@@ -80,7 +89,7 @@ export function QRScan({ idEsperado }) {
         {!expanded && (
           <button
             onClick={handleScan}
-            className=" p-2 bg-white text-black rounded-md z-10"
+            className="p-2 bg-white text-black rounded-md z-10"
           >
             <BsQrCodeScan className="text-xl" />
           </button>
@@ -89,8 +98,6 @@ export function QRScan({ idEsperado }) {
 
       {/* Actividad */}
       <div className="text-white text-sm">
-
-        {/* Mensaje de resultado */}
         {scanned && valid && (
           <div className="flex items-center gap-1 text-green-400">
             <FaCheck /> QR correcto
