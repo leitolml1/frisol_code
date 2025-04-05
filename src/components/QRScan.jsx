@@ -1,5 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Html5Qrcode } from 'html5-qrcode';
+import { BsQrCodeScan } from "react-icons/bs";
+import { FaCheck } from "react-icons/fa";
 
 export function QRScan() {
   const scannerRef = useRef(null);
@@ -77,18 +79,30 @@ export function QRScan() {
       {!isScanning && (
         <button
           onClick={handleScan}
-          className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+          className="p-2 bg-white text-center text-black rounded-lg 
+          border-1 border-blue-500 animate-pulse"
         >
-          📷 Abrir cámara
+
+          <BsQrCodeScan
+            className='text-xl'
+          />
+
         </button>
+
+
+
       )}
 
       <div id="reader" style={{ width: '300px' }}></div>
 
       {scannedText && (
-        <div className="mt-4 p-2 bg-green-100 text-green-800 rounded w-full text-center">
-          Código escaneado: <strong>{scannedText}</strong>
+        <div class=" p-2  bg-linear-to-r from-green-500 to-green-800 text-center text-black rounded-lg 
+                         ">
+          <FaCheck
+            className='text-xl'
+          />
         </div>
+
       )}
     </div>
   );
