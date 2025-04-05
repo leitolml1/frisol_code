@@ -15,8 +15,8 @@ export function PageEntradaQR() {
             <div>
               <div>
               <h1 className='text-xl font-bold text-gray-100'>Flisol Evento Salta</h1>
-              <h2 className='text-gray-100'>27 feb 2025, 19:00 GMT-3</h2>
-              <h2 className='text-gray-100'>San Lorenzo 141, A4400 Salta, Argentina</h2>
+              <h2 className='text-gray-100'>26 abril 2025</h2>
+              <h2 className='text-gray-100'>"Direccion", A4400 Salta, Argentina</h2>
               </div>
               <div className=' flex justify-center m-6'>
                 <img src="https://images.icon-icons.com/1521/PNG/512/qrcodehd_106111.png" alt=""

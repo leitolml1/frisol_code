@@ -24,7 +24,7 @@ export default function PageCartonEventos() {
 
                     <div className='text-md text-gray-100'>
                         <h2>
-                            Destruir al afip desde adentro
+                            ACTIVIDAD 1
                         </h2>
                     </div>
 
@@ -40,7 +40,7 @@ export default function PageCartonEventos() {
 
                     <div className='text-md text-gray-100'>
                         <h2>
-                            Destruir al afip desde adentro
+                            ACTIVIDAD 2
                         </h2>
                     </div>
 
