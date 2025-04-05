@@ -1,5 +1,5 @@
 import React from 'react'
-
+import { QRScan } from '../components/QRScan'
 export function PageEntradaQR() {
   return (
     <>
@@ -29,8 +29,9 @@ export function PageEntradaQR() {
                 <button className='bg-linear-to-r from-cyan-500 to-blue-500 p-2 w-full rounded-xl font-bold'>Direccion</button>
                 <button className='bg-linear-to-r from-green-500 to-green-800 p-2 w-full rounded-xl font-bold'>Añadir a la cartera</button>
               </div>
-
-
+              <div>
+                <QRScan/>
+              </div>
           </div>
         </div>
       

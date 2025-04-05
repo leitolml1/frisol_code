@@ -37,7 +37,8 @@ export function QRScan() {
   }, [mostrarScanner]);
 
   return (
-    <div className="flex flex-col items-center p-4 justify-center">
+    <>
+        <div className="flex flex-col items-center p-4 justify-center">
       <h2 className="text-xl font-bold mb-4">Escaneá tu código QR</h2>
 
       {!mostrarScanner && (
@@ -52,5 +53,6 @@ export function QRScan() {
       {/* Div donde se monta el lector */}
       {mostrarScanner && <div id="qr-reader" style={{ width: "300px" }}></div>}
     </div>
+    </>
   );
 }
