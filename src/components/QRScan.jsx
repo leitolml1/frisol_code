@@ -78,37 +78,44 @@ export function QRScan({ idEsperado, onExpand = () => {} }) {
   }, []);
 
   return (
-    <div className="flex items-center gap-3 relative">
-      {/* Lector QR */}
-      <div className="relative">
-        <div
-          id="reader"
-          className={`transition-all duration-300 bg-black rounded-md overflow-hidden
-            ${expanded ? 'w-[200px] h-[200px]' : 'w-[1px] h-[1px]'}`}
-        />
-        {!expanded && (
-          <button
-            onClick={handleScan}
-            className="p-2 bg-white text-black rounded-md z-10"
-          >
-            <BsQrCodeScan className="text-xl" />
-          </button>
-        )}
-      </div>
+<div className="flex items-center gap-3 relative">
+  {/* Lector QR */}
+  <div className="relative">
+    <div
+      id="reader"
+      className={`transition-all duration-300 bg-black rounded-md overflow-hidden
+        ${expanded ? 'w-[200px] h-[200px]' : 'w-[1px] h-[1px]'}`}
+    />
 
-      {/* Actividad */}
-      <div className="text-white text-sm">
-        {scanned && valid && (
-          <div className="flex items-center gap-1 text-green-400">
-            <FaCheck /> QR correcto
-          </div>
-        )}
-        {scanned && valid === false && (
-          <div className="flex items-center gap-1 text-red-400">
-            <FaTimes /> QR incorrecto
-          </div>
-        )}
+    {!expanded && !scanned && (
+      <button
+        onClick={handleScan}
+        className="p-2 bg-white text-black rounded-md z-10"
+      >
+        <BsQrCodeScan className="text-xl" />
+      </button>
+    )}
+
+    {!expanded && scanned && valid && (
+      <div className="p-2 bg-green-500 text-white rounded-md z-10">
+        <FaCheck className="text-xl" />
       </div>
-    </div>
+    )}
+  </div>
+
+  {/* Actividad */}
+  <div className="text-white text-sm">
+    {scanned && valid && (
+      <div className="flex items-center gap-1 text-green-400">
+        <FaCheck /> QR correcto
+      </div>
+    )}
+    {scanned && valid === false && (
+      <div className="flex items-center gap-1 text-red-400">
+        <FaTimes /> QR incorrecto
+      </div>
+    )}
+  </div>
+</div>
   );
 }
