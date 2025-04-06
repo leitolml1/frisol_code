@@ -16,12 +16,12 @@ export function PageStaffPanel() {
             Escanear QR
           </Link>
 
-          <Link to="/registro-manual" className="block bg-green-600 p-4 rounded-xl flex items-center gap-4 hover:bg-green-700">
+          <Link to="/formularioFrisol" className="block bg-green-600 p-4 rounded-xl flex items-center gap-4 hover:bg-green-700">
             <HiUserAdd className="text-2xl" />
             Registro manual
           </Link>
 
-          <Link to="/asistentes" className="block bg-purple-600 p-4 rounded-xl flex items-center gap-4 hover:bg-purple-700">
+          <Link to="/buscar" className="block bg-purple-600 p-4 rounded-xl flex items-center gap-4 hover:bg-purple-700">
             <FaListUl className="text-2xl" />
             Lista de asistentes
           </Link>

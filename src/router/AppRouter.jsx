@@ -16,7 +16,7 @@ export  function AppRouter() {
         <Route path="/datosConfirmados" element={<PageDatosConfirmados/>}/>
         <Route path="/entradaQR" element={<PageEntradaQR/>}/>
         <Route path="/cartonEventos" element={<PageCartonEventos/>}/>
-        <Route path="/qr-test" element={<QRScan.jsx/>}/>
+        <Route path="/qr-test" element={<QRScan/>}/>
         <Route path="/staff" element={<PageStaffPanel/>}/>
         <Route path="/buscar" element={<PageBuscarInscrito/>}/>
     </Routes>
