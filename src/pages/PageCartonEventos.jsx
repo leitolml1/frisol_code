@@ -1,56 +1,86 @@
-import React from 'react'
-import { BsQrCodeScan } from "react-icons/bs";
-import { FaCheck } from "react-icons/fa";
+import React, { useEffect, useState } from 'react';
+import { useSearchParams } from 'react-router-dom';
+import { FaCheckCircle, FaQrcode } from 'react-icons/fa';
 
 export default function PageCartonEventos() {
+  const [params] = useSearchParams();
+  const email = params.get('email');
+
+  const [usuario, setUsuario] = useState(null);
+
+  useEffect(() => {
+    // Simulamos traer los datos reales de la base por email
+    const fetchUsuario = async () => {
+      try {
+        const res = await fetch(`https://tu-api.com/invitados/${email}`);
+        const data = await res.json();
+        setUsuario(data);
+      } catch (error) {
+        console.error('Error al obtener usuario:', error);
+      }
+    };
+
+    if (email) fetchUsuario();
+  }, [email]);
+
+  const marcarAsistenciaEvento = async (evento) => {
+    try {
+      await fetch(`https://tu-api.com/invitados/${email}/evento`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ evento })
+      });
+
+      setUsuario(prev => ({
+        ...prev,
+        eventos: { ...prev.eventos, [evento]: true }
+      }));
+    } catch (err) {
+      console.error('Error marcando asistencia:', err);
+    }
+  };
+
+  if (!usuario) {
     return (
-        <div className="flex items-center justify-center min-h-screen p-6 ">
-            <div className="bg-gray-900 p-6 rounded-lg shadow-lg w-full max-w-md ">
+      <div className="text-center text-white p-6">
+        <p>Cargando datos...</p>
+      </div>
+    );
+  }
 
-                <div>
-                    <h1 className='text-2xl font-bold text-gray-100'>
-                        Actividades Flisol 2025
-                    </h1>
-                </div>
+  const eventos = [
+    { key: 'charla', nombre: 'Charla Principal' },
+    { key: 'competencia', nombre: 'Competencia' },
+    { key: 'stream', nombre: 'Transmisión en Vivo' },
+    { key: 'taller', nombre: 'Taller para Principiantes' }
+  ];
 
-                <div className='flex flex-row ga-p4 items-center mt-4'>
-                    <div class=" p-2  bg-linear-to-r from-green-500 to-green-800 text-center text-black rounded-lg 
-                         ">
-                        <FaCheck
-                            className='text-xl'
-                        />
-                    </div>1
+  return (
+    <div className="min-h-screen bg-gray-900 text-white p-6">
+      <h1 className="text-3xl font-bold mb-4">Cartón de Eventos</h1>
+      <p className="mb-2">Nombre: {usuario.nombre}</p>
+      <p className="mb-4">Email: {usuario.email}</p>
 
-
-                    <div className='text-md text-gray-100'>
-                        <h2>
-                            Destruir al afip desde adentro
-                        </h2>
-                    </div>
-
-                </div>
-                <div className='flex flex-row ga-p4 items-center mt-4'>
-                    <div class=" p-2 bg-white text-center text-black rounded-lg 
-                        border-1 border-blue-500 animate-pulse">
-                        <BsQrCodeScan
-                            className='text-xl'
-                        />
-                    </div>1
-
-
-                    <div className='text-md text-gray-100'>
-                        <h2>
-                            Destruir al afip desde adentro
-                        </h2>
-                    </div>
-
-                </div>
-
-
-
-
-
-            </div>
-        </div>
-    )
+      <div className="grid gap-4">
+        {eventos.map(ev => (
+          <div key={ev.key} className="bg-gray-800 p-4 rounded-xl flex justify-between items-center">
+            <span>{ev.nombre}</span>
+            {usuario.eventos?.[ev.key] ? (
+              <FaCheckCircle className="text-green-400 text-2xl" />
+            ) : (
+              <button
+                className="bg-blue-600 hover:bg-blue-700 p-2 rounded-lg flex items-center gap-2"
+                onClick={() => marcarAsistenciaEvento(ev.key)}
+              >
+                <FaQrcode /> Escanear QR
+              </button>
+            )}
+          </div>
+        ))}
+      </div>
+    </div>
+  );
 }
+
+
+// IGNORA TODO LEITO ZZZ ZZZZ
