@@ -8,7 +8,7 @@ export  function Navegacion() {
         <Link to="/datosConfirmados">Datos Enviados</Link>
         <Link to="/entradaQR">Entrada QR</Link>
         <Link to="/cartonEventos">Carton</Link>
-        <Link to="/test">Staff</Link>
+        <Link to="/staff">Staff</Link>
     </div>
     </>
   )
