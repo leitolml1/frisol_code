@@ -87,19 +87,21 @@ export function QRScan({ idEsperado, onExpand = () => {} }) {
         ${expanded ? 'w-[200px] h-[200px]' : 'w-[1px] h-[1px]'}`}
     />
 
-    {!expanded && !scanned && (
-      <button
-        onClick={handleScan}
-        className="p-2 bg-white text-black rounded-md z-10"
-      >
-        <BsQrCodeScan className="text-xl" />
-      </button>
-    )}
-
-    {!expanded && scanned && valid && (
-      <div className="p-2 bg-green-500 text-white rounded-md z-10">
-        <FaCheck className="text-xl" />
-      </div>
+    {!expanded && (
+      <>
+        {scanned && valid ? (
+          <div className="p-2 bg-green-500 text-white rounded-md z-10">
+            <FaCheck className="text-xl" />
+          </div>
+        ) : (
+          <button
+            onClick={handleScan}
+            className="p-2 bg-white text-black rounded-md z-10"
+          >
+            <BsQrCodeScan className="text-xl" />
+          </button>
+        )}
+      </>
     )}
   </div>
 

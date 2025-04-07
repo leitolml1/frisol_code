@@ -25,7 +25,21 @@ export function PageCartonEventos() {
           <div className="text-md text-gray-100">
             <h2>ACTIVIDAD 2</h2>
           </div>
+          
         </div>
+        <div
+          className={`flex ${
+            expandido ? 'flex-col' : 'flex-row'
+          } gap-4 items-center mt-4 transition-all duration-300`}
+        >
+        <QRScan
+            idEsperado="actividadFlisol2"
+            onExpand={(exp) => setExpandido(exp)}
+          />
+          <div className="text-md text-gray-100">
+            <h2>ACTIVIDAD  3</h2>
+          </div>
+          </div>
       </div>
     </div>
   );
