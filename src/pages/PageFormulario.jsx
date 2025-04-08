@@ -1,16 +1,33 @@
 import React from 'react'
-import {useNavigate } from 'react-router-dom'
 import { HiUser } from "react-icons/hi";
 import { HiPhone } from "react-icons/hi";
 import { CgMail } from "react-icons/cg";
 import { useForm } from 'react-hook-form';
-export function PageFormulario() {
-    const { register, handleSubmit, formState: { errors } } = useForm()
-    const navigate = useNavigate()
-    function onSubmit(data) {
-        console.log(data)
-        navigate("/datosConfirmados")
-    }
+import { createUsuario } from '../api/backendFrisola.api';
+import { useNavigate } from 'react-router-dom';
+export  function PageFormulario() {
+    const navigate=useNavigate()
+    const {
+      register,
+      handleSubmit,
+      setError,
+      formState: { errors }
+    } = useForm();
+  
+    const onSubmit = async (data) => {
+      try {
+        await createUsuario(data);
+        navigate("datosConfirmados")
+      } catch (error) {
+        if (error.response?.status === 302) {
+          setError("email", {
+            type: "manual",
+            message: "Este correo ya está registrado"
+          });
+        }
+      }
+    };
+
     return (
         <>
             <div className="flex items-center justify-center min-h-screen p-6 ">
@@ -62,23 +79,23 @@ export function PageFormulario() {
                             />
                         </div>
 
-
-
                         <div className='flex flex-row gap-4'>
                             <CgMail className='text-4xl rounded p-1 bg-gradient-to-r from-orange-500 to-orange-800 text-white' />
 
                             <input
                                 type="email"
-                                className={`w-full p-2 rounded-xl border ${errors.correo_electronico ? 'border-red-500  bg-red-300' : 'border-gray-700 bg-sky-100'
+                                className={`w-full p-2 rounded-xl border ${errors.email  ? 'border-red-500  bg-red-300' : 'border-gray-700 bg-sky-100'
                                     } `}
                                 placeholder='Correo electrónico'
-                                {...register("correo_electronico", { required: true })}
+                                {...register("email", { required: true })}
                             />
                         </div>
+                        {errors.email && <p className='text-red-500 text-sm'>{errors.email.message}</p>}
+
 
 
                         <div className='mt-2'>
-                            <button class="relative px-6 py-3 text-white font-bold rounded-lg overflow-hidden bg-gradient-to-r from-pink-500 via-yellow-500
+                            <button className="relative px-6 py-3 text-white font-bold rounded-lg overflow-hidden bg-gradient-to-r from-pink-500 via-yellow-500
                          to-pink-600 animate-gradient w-full botonEnviar">
                                 Enviar
 
