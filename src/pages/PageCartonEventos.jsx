@@ -3,13 +3,16 @@ import { QRScan } from '../components/QRScan';
 import { useParams } from 'react-router-dom';
 import { getCartonUsuario } from '../api/backendFrisola.api';
 import { getUsuario } from '../api/backendFrisola.api';
-import { getAllEventos } from '../api/backenEventos.api';
+import { getAllEventos, getAllEventosAsistidos } from '../api/backenEventos.api';
 import { useNavigate } from 'react-router-dom';
 export function PageCartonEventos() {
   const navigate=useNavigate()
   const [usuario, setUsuario] = useState()
   const [eventos, setEvento] = useState([])
+  const [enventosAsistidos,setEventoAsistido]=useState([])
   const { email } = useParams()
+
+
   useEffect(() => {
     const fetchUsuario = async () => {
       try {
@@ -27,8 +30,13 @@ export function PageCartonEventos() {
         console.error("Error al obtener los eventos", error)
       }
     }
+    const fecthEventosAsistidos=async()=>{
+      const res=await getAllEventosAsistidos(email)
+      setEventoAsistido(res.data)
+    }
+    fetchUsuario()
     fecthEventos()
-    fetchUsuario();
+    fecthEventosAsistidos()
   }, [email]);
 
   console.log(usuario)
@@ -51,8 +59,10 @@ export function PageCartonEventos() {
               } gap-4 items-center mt-4 transition-all duration-300`}
           >
             <QRScan
-              idEsperado="actividadFlisol2"
+              idEsperado={evento.id}
+              idUsuario={usuario.id}
               onExpand={(exp) => setExpandido(exp)}
+
             />
             <div className="text-md text-gray-100">
               <h2>{evento.nombre}</h2>

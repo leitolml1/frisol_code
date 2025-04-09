@@ -2,13 +2,17 @@ import React, { useEffect, useRef, useState } from 'react';
 import { Html5Qrcode } from 'html5-qrcode';
 import { BsQrCodeScan } from "react-icons/bs";
 import { FaCheck, FaTimes } from "react-icons/fa";
+import { marcarEventoAsistido } from '../api/backenEventos.api';
 
-export function QRScan({ idEsperado, onExpand = () => {} }) {
+export function QRScan({ idEsperado,idUsuario, onExpand = () => {} }) {
   const scannerRef = useRef(null);
   const [isScanning, setIsScanning] = useState(false);
   const [scanned, setScanned] = useState(false);
   const [valid, setValid] = useState(null);
   const [expanded, setExpanded] = useState(false);
++  async function marcarAsistencia(idEvento,idUsuario) {
+        await marcarEventoAsistido(idEvento,idUsuario)      
+    }
 
   const handleScan = async () => {
     if (isScanning) return;
@@ -44,7 +48,8 @@ export function QRScan({ idEsperado, onExpand = () => {} }) {
             setIsScanning(false);
           });
 
-          if (decodedText === `actividad:${idEsperado}`) {
+          if (decodedText === idEvento) {
+            marcarAsistencia(idEvento,idUsuario)
             setScanned(true);
             setValid(true);
           } else {
