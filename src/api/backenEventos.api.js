@@ -6,6 +6,10 @@ const EventosFrisolAPI=axios.create({
 
 export const getAllEventos=()=>EventosFrisolAPI.get("Obtener_Eventos/")
 
-export const marcarEventoAsistido=(idEvento,idUsuario)=>EventosFrisolAPI.get(`/Marcar_Asistencia_Evento/${email}/`)
-
+export const marcarEventoAsistido = (email, evento) => {
+    return EventosFrisolAPI.post(`/Marcar_Asistencia_Evento/`, {
+      email: email,
+      evento: evento
+    });
+  };
 export const getAllEventosAsistidos=(email)=>EventosFrisolAPI.post(`/Obtener_Eventos_Asistidos/${email}`)

@@ -59,8 +59,8 @@ export function PageCartonEventos() {
               } gap-4 items-center mt-4 transition-all duration-300`}
           >
             <QRScan
-              idEsperado={evento.id}
-              idUsuario={usuario.id}
+              nombreEvento={evento.nombre}
+              email={usuario.email}
               onExpand={(exp) => setExpandido(exp)}
 
             />
