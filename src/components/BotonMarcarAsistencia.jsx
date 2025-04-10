@@ -8,7 +8,7 @@ export function BotonMarcarAsistencia({ email, asistencia }) {
       await marcarAsistencia(email);
       setAsistenciaMarcada(true); // ✅ Actualiza el estado local
     } catch (error) {
-      console.error("Error al marcar asistencia:", error);
+      console.error("Error al marcar asistencia: del usuario", error);
     }
   }
 
