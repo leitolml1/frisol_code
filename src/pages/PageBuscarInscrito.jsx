@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { getUsuario } from '../api/backendFrisola.api';
 import { useForm } from 'react-hook-form';
-
+import { BotonMarcarAsistencia } from '../components/BotonMarcarAsistencia';
 export function PageBuscarInscrito() {
   const { register, errors, handleSubmit } = useForm()
   const [resultado, setResultado] = useState(null);
@@ -10,9 +10,6 @@ export function PageBuscarInscrito() {
     const res=await getUsuario(data.email)
     setResultado(res.data)
   };
-  function submitAsistencia (idUsuario){
-    console.log(idUsuario)
-  }
 
   return (
     <div className="flex items-center justify-center min-h-screen p-6">
@@ -43,7 +40,8 @@ export function PageBuscarInscrito() {
                   <li><strong>Apellido:</strong> {resultado.apellido}</li>
                   <li><strong>Telefono:</strong> {resultado.telefono}</li>
                 </ul>
-                <button className='bg-black w-full p-2 mt-2 rounded-2xl hover:bg-gray-700 ' onClick={()=>submitAsistencia(resultado.id)}>Marcar Asistencia</button>
+                  <BotonMarcarAsistencia email={resultado.email} asistencia={resultado.asistencia}/>
+
               </div>
             )}
           </div>

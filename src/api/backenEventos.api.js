@@ -12,4 +12,7 @@ export const marcarEventoAsistido = (email, evento) => {
       evento: evento
     });
   };
-  export const getAllEventosAsistidos = (email) => EventosFrisolAPI.post(`/Obtener_Eventos_Asistidos/`, { email });
+
+export const getAllEventosAsistidos = (email) => EventosFrisolAPI.post(`/Obtener_Eventos_Asistidos/`, { email });
+
+

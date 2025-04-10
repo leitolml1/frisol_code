@@ -41,21 +41,29 @@ export function PageCartonEventos() {
     fecthEventosAsistidos()
   }, [email]);
 
-  console.log(enventosAsistidos)
   const [expandido, setExpandido] = useState(false);
 
   return (
     <div className="flex items-center justify-center min-h-screen p-6">
       <div className="bg-gray-900 p-6 rounded-lg shadow-lg w-full max-w-md">
-        <div>
-          <h1 className="text-2xl font-bold text-gray-100">
-            Actividades Flisol 2025
-          </h1>
+        <div className='flex flex-row '>
+          <img
+            src="https://flisol.info/Logo?action=AttachFile&do=get&target=FLISoL-2015.png"
+            alt="Flisol"
+            className="w-40"
+          />
+          <img
+            src="https://media.tenor.com/NeJfHqkmdMIAAAAj/tux-linux-penguin.gif" alt=""
+            className='w-16'
+            />
+
         </div>
+        <h2 className='text-xl font-bold text-gray-100'>
+            Cartón: {usuario ? usuario.id : 'Cargando...'}
+          </h2>
 
         {eventos.map(evento => {
           const asistio = enventosAsistidos.some(ea => ea.evento === evento.id);
-
           return (
             <div
               key={evento.id}
@@ -66,11 +74,13 @@ export function PageCartonEventos() {
                   <FaCheck className="text-xl" />
                 </div>
               ) : (
-                <QRScan
-                  nombreEvento={evento.nombre}
-                  email={usuario.email}
-                  onExpand={(exp) => setExpandido(exp)}
-                />
+                usuario && (
+                  <QRScan
+                    nombreEvento={evento.nombre}
+                    email={usuario.email}
+                    onExpand={(exp) => setExpandido(exp)}
+                  />
+                )
               )}
               <div className="text-md text-gray-100">
                 <h2>{evento.nombre}</h2>

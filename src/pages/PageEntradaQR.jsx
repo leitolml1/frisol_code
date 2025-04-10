@@ -23,12 +23,7 @@ export function PageEntradaQR() {
                   
                 />
               </div>
-            </div>
-              <div className='flex flex-row gap-4 justify-around'>
-                <button className='bg-linear-to-r from-cyan-500 to-blue-500 p-2 w-full rounded-xl font-bold'>Direccion</button>
-                <button className='bg-linear-to-r from-green-500 to-green-800 p-2 w-full rounded-xl font-bold'>Añadir a la cartera</button>
-              </div>
-              <div>
+
               </div>
           </div>
         </div>
