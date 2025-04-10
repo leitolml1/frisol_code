@@ -49,7 +49,7 @@ export function QRScan({ nombreEvento,email, onExpand = () => {} }) {
           });
 
           if (decodedText === nombreEvento) {
-            marcarAsistencia(nombreEvento,email)
+            marcarAsistencia(email,nombreEvento)
             setScanned(true);
             setValid(true);
           } else {
