@@ -1,7 +1,7 @@
 import axios from "axios"
 
 const FrisolAPI=axios.create({
-    baseURL:"http://127.0.0.1:8000/Usuarios"
+    baseURL:"https://backend-nb6u.onrender.com/Usuarios"
 })
 
 export const createUsuario = (usuario)=>FrisolAPI.post("Crear_Usuario/",usuario)
