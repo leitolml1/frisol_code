@@ -30,7 +30,7 @@ export function QRScan({ nombreEvento, email, onExpand = () => {} }) {
     scannerRef.current = html5QrCode;
 
     try {
-      const devices = await Html5QrCode.getCameras();
+      const devices = await Html5Qrcode.getCameras();
       if (!devices || devices.length === 0) {
         alert("❌ No se encontraron cámaras.");
         onExpand(false);
@@ -67,10 +67,15 @@ export function QRScan({ nombreEvento, email, onExpand = () => {} }) {
 
           // Para mostrar el mensaje de QR correcto o incorrecto
           setTimeout(() => {
-            setValid(null); // El mensaje "QR correcto" o "incorrecto" desaparecerá
-          }, 2000); // El mensaje desaparecerá después de 2 segundos
+            setExpanded(false);
+            onExpand(false);
+          }, 500);
 
-          // No necesitamos restablecer el estado de "scanned" para que el icono check quede visible
+          // Reset para permitir un nuevo escaneo si fuera necesario
+          setTimeout(() => {
+            setScanned(false);
+            setValid(null);
+          }, 2000); // Mantener los estados por un breve tiempo
         },
         (err) => {}
       );
