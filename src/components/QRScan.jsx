@@ -4,23 +4,25 @@ import { BsQrCodeScan } from "react-icons/bs";
 import { FaCheck, FaTimes } from "react-icons/fa";
 import { marcarEventoAsistido } from '../api/backenEventos.api';
 
-export function QRScan({ nombreEvento,email, onExpand = () => {} }) {
+export function QRScan({ nombreEvento, email, onExpand = () => {} }) {
   const scannerRef = useRef(null);
   const [isScanning, setIsScanning] = useState(false);
   const [scanned, setScanned] = useState(false);
   const [valid, setValid] = useState(null);
   const [expanded, setExpanded] = useState(false);
-  async function marcarAsistencia(nombreEvento,email) {
-        await marcarEventoAsistido(nombreEvento,email)
-        console.log("Se ha marcado su particapacion en la actividad!")      
-    }
+
+  async function marcarAsistencia( email,nombreEvento) {
+    await marcarEventoAsistido(email, nombreEvento);
+    console.log("Se ha marcado su participación en la actividad!");
+  }
+
   const handleScan = async () => {
     if (isScanning) return;
 
     setExpanded(true);
     onExpand(true);
 
-    const qrRegionId = 'reader';
+    const qrRegionId = 'reader-' + nombreEvento; // <-- Un ID único por evento
     const html5QrCode = new Html5Qrcode(qrRegionId);
     scannerRef.current = html5QrCode;
 
@@ -49,7 +51,7 @@ export function QRScan({ nombreEvento,email, onExpand = () => {} }) {
           });
 
           if (decodedText === nombreEvento) {
-            marcarAsistencia(email,nombreEvento)
+            marcarAsistencia(email,nombreEvento); // 👈 Corregido
             setScanned(true);
             setValid(true);
           } else {
@@ -57,11 +59,17 @@ export function QRScan({ nombreEvento,email, onExpand = () => {} }) {
             setValid(false);
           }
 
-          // 🔐 Cerrar la cámara visual después de escanear
+          // 🔐 Ocultar escáner
           setTimeout(() => {
             setExpanded(false);
             onExpand(false);
           }, 500);
+
+          // 🔁 Reiniciar estado para permitir nuevo escaneo
+          setTimeout(() => {
+            setScanned(false);
+            setValid(null);
+          }, 2000);
         },
         (err) => {}
       );
@@ -83,46 +91,46 @@ export function QRScan({ nombreEvento,email, onExpand = () => {} }) {
   }, []);
 
   return (
-<div className="flex items-center gap-3 relative">
-  {/* Lector QR */}
-  <div className="relative">
-    <div
-      id="reader"
-      className={`transition-all duration-300 bg-black rounded-md overflow-hidden
-        ${expanded ? 'w-[200px] h-[200px]' : 'w-[1px] h-[1px]'}`}
-    />
+    <div className="flex items-center gap-3 relative">
+      {/* Lector QR */}
+      <div className="relative">
+        <div
+          id={'reader-' + nombreEvento}
+          className={`transition-all duration-300 bg-black rounded-md overflow-hidden
+          ${expanded ? 'w-[200px] h-[200px]' : 'w-[1px] h-[1px]'}`}
+        />
 
-    {!expanded && (
-      <>
-        {scanned && valid ? (
-          <div className="p-2 bg-green-500 text-white rounded-md z-10">
-            <FaCheck className="text-xl" />
-          </div>
-        ) : (
-          <button
-            onClick={handleScan}
-            className="p-2 bg-white text-black rounded-md z-10"
-          >
-            <BsQrCodeScan className="text-xl" />
-          </button>
+        {!expanded && (
+          <>
+            {scanned && valid ? (
+              <div className="p-2 bg-green-500 text-white rounded-md z-10">
+                <FaCheck className="text-xl" />
+              </div>
+            ) : (
+              <button
+                onClick={handleScan}
+                className="p-2 bg-white text-black rounded-md z-10"
+              >
+                <BsQrCodeScan className="text-xl" />
+              </button>
+            )}
+          </>
         )}
-      </>
-    )}
-  </div>
+      </div>
 
-  {/* Actividad */}
-  <div className="text-white text-sm">
-    {scanned && valid && (
-      <div className="flex items-center gap-1 text-green-400">
-        <FaCheck /> QR correcto
+      {/* Actividad */}
+      <div className="text-white text-sm">
+        {scanned && valid && (
+          <div className="flex items-center gap-1 text-green-400">
+            <FaCheck /> QR correcto
+          </div>
+        )}
+        {scanned && valid === false && (
+          <div className="flex items-center gap-1 text-red-400">
+            <FaTimes /> QR incorrecto
+          </div>
+        )}
       </div>
-    )}
-    {scanned && valid === false && (
-      <div className="flex items-center gap-1 text-red-400">
-        <FaTimes /> QR incorrecto
-      </div>
-    )}
-  </div>
-</div>
+    </div>
   );
 }
