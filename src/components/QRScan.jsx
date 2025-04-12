@@ -65,15 +65,17 @@ export function QRScan({ nombreEvento, email, onExpand = () => {} }) {
             setValid(false);
           }
 
+          // Para mostrar el mensaje de QR correcto o incorrecto
           setTimeout(() => {
             setExpanded(false);
             onExpand(false);
           }, 500);
 
+          // Reset para permitir un nuevo escaneo si fuera necesario
           setTimeout(() => {
             setScanned(false);
             setValid(null);
-          }, 0);
+          }, 2000); // Mantener los estados por un breve tiempo
         },
         (err) => {}
       );
