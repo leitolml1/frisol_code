@@ -11,7 +11,10 @@ export function QRScan({ nombreEvento, email, onExpand = () => {} }) {
   const [valid, setValid] = useState(null);
   const [expanded, setExpanded] = useState(false);
 
-  async function marcarAsistencia( email,nombreEvento) {
+  // Estado que mantiene los eventos que ya fueron escaneados
+  const [eventosMarcados, setEventosMarcados] = useState([]);
+
+  async function marcarAsistencia(email, nombreEvento) {
     await marcarEventoAsistido(email, nombreEvento);
     console.log("Se ha marcado su participación en la actividad!");
   }
@@ -22,7 +25,7 @@ export function QRScan({ nombreEvento, email, onExpand = () => {} }) {
     setExpanded(true);
     onExpand(true);
 
-    const qrRegionId = 'reader-' + nombreEvento; // <-- Un ID único por evento
+    const qrRegionId = 'reader-' + nombreEvento; // Un ID único por evento
     const html5QrCode = new Html5Qrcode(qrRegionId);
     scannerRef.current = html5QrCode;
 
@@ -51,25 +54,26 @@ export function QRScan({ nombreEvento, email, onExpand = () => {} }) {
           });
 
           if (decodedText === nombreEvento) {
-            marcarAsistencia(email,nombreEvento); // 👈 Corregido
+            marcarAsistencia(email, nombreEvento);
             setScanned(true);
             setValid(true);
+
+            // Marcar el evento como escaneado para no volver a mostrar el botón
+            setEventosMarcados(prev => [...prev, nombreEvento]);
           } else {
             setScanned(true);
             setValid(false);
           }
 
-          // 🔐 Ocultar escáner
           setTimeout(() => {
             setExpanded(false);
             onExpand(false);
           }, 500);
 
-          // 🔁 Reiniciar estado para permitir nuevo escaneo
           setTimeout(() => {
             setScanned(false);
             setValid(null);
-          }, 2000);
+          }, 0);
         },
         (err) => {}
       );
@@ -107,12 +111,15 @@ export function QRScan({ nombreEvento, email, onExpand = () => {} }) {
                 <FaCheck className="text-xl" />
               </div>
             ) : (
-              <button
-                onClick={handleScan}
-                className="p-2 bg-white text-black rounded-md z-10"
-              >
-                <BsQrCodeScan className="text-xl" />
-              </button>
+              // Evitar mostrar el botón QRScan si el evento ya fue escaneado
+              !eventosMarcados.includes(nombreEvento) && (
+                <button
+                  onClick={handleScan}
+                  className="p-2 bg-white text-black rounded-md z-10"
+                >
+                  <BsQrCodeScan className="text-xl" />
+                </button>
+              )
             )}
           </>
         )}
